@@ -1,0 +1,21 @@
+{
+  "textureAtlas": {
+    "texture": "Perso.png",
+    "regionWidth": 40,
+    "regionHeight": 40
+  },
+  "cycles": {
+    "walk": {
+      "frames": [3,4,5,6,4]
+    },
+    "decolage": {
+      "frames": [0]
+    },
+    "vol": {
+      "frames": [1]
+    },
+    "atterisage": {
+      "frames": [2]
+    }
+  }
+}

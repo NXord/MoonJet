@@ -1,0 +1,12 @@
+{
+  "textureAtlas": {
+    "texture": "Pet.png",
+    "regionWidth": 40,
+    "regionHeight": 40
+  },
+  "cycles": {
+    "idle": {
+      "frames": [0,1,2,3]
+    }
+  }
+}

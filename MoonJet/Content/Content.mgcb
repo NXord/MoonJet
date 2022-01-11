@@ -10,6 +10,35 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:C:\Users\noero\Documents\dll\MonoGame.Extended.Content.Pipeline.dll
+/reference:C:\Users\noero\Documents\dll\MonoGame.Extended.dll
+/reference:C:\Users\noero\Documents\dll\MonoGame.Extended.Graphics.dll
+/reference:C:\Users\noero\Documents\dll\MonoGame.Extended.Tiled.dll
+/reference:C:\Users\noero\Documents\dll\Newtonsoft.Json.dll
 
 #---------------------------------- Content ---------------------------------#
+
+#begin Perso.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Perso.png
+
+#begin Pet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pet.png
 

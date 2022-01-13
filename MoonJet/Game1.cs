@@ -19,7 +19,32 @@ namespace MoonJet
         private AnimatedSprite _perso;
         private TypeAnimation _animation;
         private Vector2 _positionPerso;
+        public const int TAILLE_FENETRE= 800;
+        private Vector2 _scale;
+        public TypeAnimation Animation
+        {
+            get
+            {
+                return this._animation;
+            }
 
+            set
+            {
+                this._animation = value;
+            }
+        }
+        public AnimatedSprite Perso
+        {
+            get
+            {
+                return this._perso;
+            }
+
+            set
+            {
+                this._perso = value;
+            }
+        }
 
         public Game1()
         {
@@ -31,7 +56,13 @@ namespace MoonJet
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             _positionPerso = new Vector2(16, 16);
+            _graphics.PreferredBackBufferWidth = TAILLE_FENETRE;
+            _graphics.PreferredBackBufferHeight = TAILLE_FENETRE;
+            _scale = new Vector2(2, 2);
+
+
 
             base.Initialize();
         }
@@ -40,7 +71,7 @@ namespace MoonJet
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             SpriteSheet animation = Content.Load<SpriteSheet>("Perso.sf", new JsonContentLoader());
-            _perso = new AnimatedSprite(animation);
+            Perso = new AnimatedSprite(animation);
 
             // TODO: use this.Content to load your game content here
         }
@@ -50,10 +81,12 @@ namespace MoonJet
             float walkSpeed = (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
             KeyboardState keyboardState = Keyboard.GetState();
 
-            _animation = TypeAnimation.walk;
+            Animation = TypeAnimation.walk;
 
             Vector2 deplacement = new Vector2(0, 0);
-            
+
+            Perso.Play(Animation.ToString());
+            Perso.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -64,7 +97,7 @@ namespace MoonJet
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_perso,_positionPerso);
+            _spriteBatch.Draw(Perso, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), 0, new Vector2((float)3, (float)3));
             _spriteBatch.End();
             base.Draw(gameTime);
         }

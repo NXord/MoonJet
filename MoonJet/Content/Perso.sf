@@ -12,7 +12,10 @@
       "frames": [0]
     },
     "vol": {
-      "frames": [1,2]
+      "frames": [ 1, 2 ]
+    },
+    "back": {
+      "frames": [ 6, 5, 4, 3 ]
     }
   }
 }

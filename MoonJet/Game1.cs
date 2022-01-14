@@ -10,7 +10,7 @@ using System;
 
 namespace MoonJet
 {
-    public enum TypeAnimation {walk,decolage,vol};
+    public enum TypeAnimation {walk,decolage,vol,back};
 
     public class Game1 : Game
     {

@@ -18,7 +18,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Perso.png
+#begin Meteor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -28,7 +28,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Perso.png
+/build:Meteor.png
 
 #begin Perso.png
 /importer:TextureImporter
@@ -41,18 +41,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Perso.png
-
-#begin Pet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Pet.png
 
 #begin Pet.png
 /importer:TextureImporter

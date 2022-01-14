@@ -19,6 +19,7 @@ namespace MoonJet
         private float _chronoFuel;
         private float _chroneFuelApp;
         public Random r = new Random();
+        private Game1 _game1;
 
         public Fuel()
         {
@@ -45,7 +46,7 @@ namespace MoonJet
             _positionFuel.X -= _pasFuel * deltaTime;
             _rectangleFuel = new Rectangle((int)_positionFuel.Y, (int)_positionFuel.X, LARGEUR_FUEL, HAUTEUR_FUEL);
 
-            if (_rectangleFuel.Intersects(_rectanglePerso))
+            if (_rectangleFuel.Intersects(_ game1._rectanglePerso))
             {
                 _positionFuel = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_FUEL), 0);
 

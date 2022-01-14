@@ -10,7 +10,7 @@ using System;
 
 namespace MoonJet
 {
-    public enum TypeAnimation { walk, decolage, atterisage, idle };
+    public enum TypeAnimation {walk,decolage,vol};
 
     public class Game1 : Game
     {
@@ -21,6 +21,11 @@ namespace MoonJet
         private Vector2 _positionPerso;
         public const int TAILLE_FENETRE= 800;
         private Vector2 _scale;
+        private Vector2 _taillePerso;
+        public const int HAUTEUR_PERSO = 27;
+        public const int LARGEUR_PERSO = 15;
+        public const int GROSSISEMENT = 4;
+
         public TypeAnimation Animation
         {
             get
@@ -57,12 +62,13 @@ namespace MoonJet
         {
             // TODO: Add your initialization logic here
 
-            _positionPerso = new Vector2(16, 16);
-            _graphics.PreferredBackBufferWidth = TAILLE_FENETRE;
+            
+            _graphics.PreferredBackBufferWidth = TAILLE_FENETRE*2;
             _graphics.PreferredBackBufferHeight = TAILLE_FENETRE;
-            _scale = new Vector2(2, 2);
-
-
+            _graphics.ApplyChanges();
+            _scale = new Vector2(GROSSISEMENT,GROSSISEMENT);
+            _taillePerso = new Vector2(LARGEUR_PERSO * _scale.X , HAUTEUR_PERSO * _scale.Y);
+            _positionPerso = new Vector2(_taillePerso.X-LARGEUR_PERSO, GraphicsDevice.Viewport.Height - _taillePerso.Y) ;
 
             base.Initialize();
         }
@@ -97,7 +103,7 @@ namespace MoonJet
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(Perso, new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2), 0, new Vector2((float)3, (float)3));
+            _spriteBatch.Draw(Perso, _positionPerso, 0, _scale);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

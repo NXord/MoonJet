@@ -17,6 +17,7 @@ namespace MoonJet
         private Rectangle _rectangleMun;
         private int _pasMun;
         public Random r = new Random();
+        private Game1 _game1;
 
         public Munition()
         {
@@ -43,7 +44,7 @@ namespace MoonJet
             _positionMun.X -= _pasMun * deltaTime;
             _rectangleMun = new Rectangle((int)_positionMun.Y, (int)_positionMun.X, LARGEUR_MUN, HAUTEUR_MUN);
 
-            if (_rectangleMun.Intersects(_rectanglePerso))
+            if (_rectangleMun.Intersects(_game1._rectanglePerso))
             {
                 _positionMun = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_MUN), 0);
 

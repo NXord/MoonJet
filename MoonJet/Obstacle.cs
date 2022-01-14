@@ -104,14 +104,14 @@ namespace MoonJet
 
                 _spriteBatch.Draw(_textureMun, _positionMun, Color.White);
             }
-            _positionMun.X -= _pasMun * deltaTime;
-            _rectangleMun = new Rectangle((int)_positionMun.Y, (int)_positionMun.X, LARGEUR_MUN, HAUTEUR_MUN);
+            _positionFuel.X -= _pasFuel * deltaTime;
+            _rectangleFuel = new Rectangle((int)_positionFuel.Y, (int)_positionFuel.X, LARGEUR_FUEL, HAUTEUR_FUEL);
 
-            if (_rectangleMun.Intersects(_rectanglePerso))
+            if (_rectangleFuel.Intersects(_rectanglePerso))
             {
-                _positionMun = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_MUN), 0);
+                _positionFuel = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_FUEL), 0);
 
-                _spriteBatch.Draw(_textureMun, _positionMun, Color.White);
+                _spriteBatch.Draw(_textureFuel, _positionFuel, Color.White);
             }
 
             base.Update(gameTime);

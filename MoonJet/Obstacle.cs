@@ -1,8 +1,7 @@
-﻿/*using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 
 namespace MoonJet
 {
@@ -77,11 +76,11 @@ namespace MoonJet
         }
         protected override void Update(GameTime gameTime)
         {
-
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _positionMeteorite.X -= _pasMeteorite * deltaTime;
             _rectangleMeteorite = new Rectangle((int)_positionMeteorite.Y, (int)_positionMeteorite.X, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
-            if (_rectangleMeteorite.Intersects(_rectanglePerso))
+            if (_rectangleMeteorite.Intersects(Game1._rectanglePerso))
             {
                 _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_METEORITE), 0);
 
@@ -127,4 +126,3 @@ namespace MoonJet
         }
     }
 }
-*/

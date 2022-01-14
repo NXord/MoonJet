@@ -25,6 +25,7 @@ namespace MoonJet
         public const int HAUTEUR_PERSO = 27;
         public const int LARGEUR_PERSO = 15;
         public const int GROSSISEMENT = 4;
+        public Rectangle _rectanglePerso;
 
         public TypeAnimation Animation
         {
@@ -69,6 +70,7 @@ namespace MoonJet
             _scale = new Vector2(GROSSISEMENT,GROSSISEMENT);
             _taillePerso = new Vector2(LARGEUR_PERSO * _scale.X , HAUTEUR_PERSO * _scale.Y);
             _positionPerso = new Vector2(_taillePerso.X-LARGEUR_PERSO, GraphicsDevice.Viewport.Height - _taillePerso.Y) ;
+            _rectanglePerso = new Rectangle((int)_positionPerso.X, (int)_positionPerso.Y, (int)_taillePerso.X, (int)_taillePerso.Y);
 
             base.Initialize();
         }

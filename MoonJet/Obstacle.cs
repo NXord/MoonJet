@@ -77,7 +77,7 @@ namespace MoonJet
         }
         protected override void Update(GameTime gameTime)
         {
-
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             _positionMeteorite.X -= _pasMeteorite * deltaTime;
             _rectangleMeteorite = new Rectangle((int)_positionMeteorite.Y, (int)_positionMeteorite.X, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 

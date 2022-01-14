@@ -19,6 +19,7 @@ namespace MoonJet
         private AnimatedSprite _perso;
         private TypeAnimation _animation;
         private Vector2 _positionPerso;
+        public Rectangle _rectanglePerso;
 
 
         public Game1()

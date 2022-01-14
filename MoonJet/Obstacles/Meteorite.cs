@@ -19,6 +19,7 @@ namespace MoonJet
 
         private int _pasMeteorite;
         public Random r = new Random();
+        private Game1 _game1;
 
         public Meteorite()
         {
@@ -47,7 +48,7 @@ namespace MoonJet
             _positionMeteorite.X -= _pasMeteorite * deltaTime;
             _rectangleMeteorite = new Rectangle((int)_positionMeteorite.Y, (int)_positionMeteorite.X, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
-            if (_rectangleMeteorite.Intersects(Game1._rectanglePerso))
+            if (_rectangleMeteorite.Intersects(_game1._rectanglePerso))
             {
                 _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_METEORITE), 0);
 

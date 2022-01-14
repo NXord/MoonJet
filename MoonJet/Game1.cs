@@ -10,7 +10,7 @@ using System;
 
 namespace MoonJet
 {
-    public enum TypeAnimation {walk,decolage,vol};
+    public enum TypeAnimation {walk,decolage,vol,back};
 
     public class Game1 : Game
     {
@@ -26,6 +26,7 @@ namespace MoonJet
         public const int LARGEUR_PERSO = 15;
         public const int GROSSISEMENT = 4;
         public Rectangle _rectanglePerso;
+        public const int SOL = TAILLE_FENETRE - 100;
 
         public TypeAnimation Animation
         {
@@ -87,14 +88,40 @@ namespace MoonJet
         protected override void Update(GameTime gameTime)
         {
             float walkSpeed = (float)gameTime.ElapsedGameTime.TotalSeconds * 100;
+            int fallSpeed = 5;
+
             KeyboardState keyboardState = Keyboard.GetState();
 
             Animation = TypeAnimation.walk;
 
             Vector2 deplacement = new Vector2(0, 0);
 
+            if (_positionPerso.Y<SOL&&!(keyboardState.IsKeyDown(Keys.Up)))
+            {
+                _positionPerso.Y += fallSpeed;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Up))
+            {
+                Animation = TypeAnimation.vol;
+                _positionPerso.Y = _positionPerso.Y - 2;
+            }
+            
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                _positionPerso.X = _positionPerso.X + 2;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+                _positionPerso.X = _positionPerso.X - 2;
+            }
+
+
+
             Perso.Play(Animation.ToString());
             Perso.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
 
             base.Update(gameTime);
         }

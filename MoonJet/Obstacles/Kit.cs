@@ -17,6 +17,7 @@ namespace MoonJet
         private Rectangle _rectangleKit;
         private int _pasKit;
         public Random r = new Random();
+        private Game1 _game1;
 
         public Kit()
         {
@@ -43,7 +44,7 @@ namespace MoonJet
             _positionKit.X -= _pasKit * deltaTime;
             _rectangleKit = new Rectangle((int)_positionKit.Y, (int)_positionKit.X, LARGEUR_KIT, HAUTEUR_KIT);
 
-            if (_rectangleKit.Intersects(_rectanglePerso))
+            if (_rectangleKit.Intersects(_game1._rectanglePerso))
             {
                 _positionKit = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_KIT), 0);
 

@@ -1,0 +1,15 @@
+{
+  "textureAtlas": {
+    "texture": "Meteor.png",
+    "regionWidth": 62,
+    "regionHeight": 62
+  },
+  "cycles": {
+    "explosion": {
+      "frames": [0]
+    },
+    "meteorite": {
+      "frames": [1]
+    }
+  }
+}

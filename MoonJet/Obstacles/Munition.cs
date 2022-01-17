@@ -97,8 +97,6 @@ namespace MoonJet
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(_textureMun, _positionMun, Color.White);
-            _spriteBatch.Draw(Mun, _positionMun, 0, _scale);
-            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

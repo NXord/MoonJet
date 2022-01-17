@@ -59,7 +59,7 @@ namespace MoonJet
             _pasMeteorite = 100;
             _graphics.ApplyChanges();
 
-            _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_METEORITE), 0);
+            _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE), 0);
             _rectangleMeteorite = new Rectangle((int)_positionMeteorite.X, (int)_positionMeteorite.Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
             base.Initialize();
@@ -77,7 +77,7 @@ namespace MoonJet
 
             if (_rectangleMeteorite.Intersects(_game1._rectanglePerso))
             {
-                _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_METEORITE), 0);
+                _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE), 0);
 
                 _spriteBatch.Draw(_textureMeteorite, _positionMeteorite, Color.White);
             }

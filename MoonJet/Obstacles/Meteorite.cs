@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
 
 namespace MoonJet
 {
@@ -11,15 +12,41 @@ namespace MoonJet
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
+        private AnimatedSprite _Meteorite;
         private Texture2D _textureMeteorite;
         private Vector2 _positionMeteorite;
         public const int LARGEUR_METEORITE = 50;
         public const int HAUTEUR_METEORITE = 57;
         private Rectangle _rectangleMeteorite;
-
+        private TypeAnimation _animation;
+        private Vector2 _scale;
         private int _pasMeteorite;
         public Random r = new Random();
         private Game1 _game1;
+        public TypeAnimation Animation
+        {
+            get
+            {
+                return this._animation;
+            }
+
+            set
+            {
+                this._animation = value;
+            }
+        }
+        public AnimatedSprite meteorite
+        {
+            get
+            {
+                return this._Meteorite;
+            }
+
+            set
+            {
+                this._Meteorite = value;
+            }
+        }
 
         public Meteorite()
         {
@@ -40,7 +67,7 @@ namespace MoonJet
 
         protected override void LoadContent()
         {
-
+            _textureMeteorite = Content.Load<Texture2D>("Meteor");
         }
         protected override void Update(GameTime gameTime)
         {
@@ -60,8 +87,10 @@ namespace MoonJet
         }
         protected override void Draw(GameTime gameTime)
         {
+            _spriteBatch.Begin();
             _spriteBatch.Draw(_textureMeteorite, _positionMeteorite, Color.White);
-
+            _spriteBatch.Draw(meteorite, _positionMeteorite, 0, _scale);
+            _spriteBatch.Begin();
             base.Draw(gameTime);
         }
     }

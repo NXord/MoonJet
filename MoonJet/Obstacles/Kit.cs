@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
 
 namespace MoonJet
 {
@@ -10,15 +11,44 @@ namespace MoonJet
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
+        private AnimatedSprite _Kit;
         private Texture2D _textureKit;
         private Vector2 _positionKit;
         public const int LARGEUR_KIT = 50;
         public const int HAUTEUR_KIT = 57;
         private Rectangle _rectangleKit;
+        private TypeAnimation _animation;
+        private float _chronoKit;
+        private float _chroneKitApp;
+        private Vector2 _scale;
         private int _pasKit;
         public Random r = new Random();
         private Game1 _game1;
 
+        public TypeAnimation Animation
+        {
+            get
+            {
+                return this._animation;
+            }
+
+            set
+            {
+                this._animation = value;
+            }
+        }
+        public AnimatedSprite Perso
+        {
+            get
+            {
+                return this._Kit;
+            }
+
+            set
+            {
+                this._Kit = value;
+            }
+        }
         public Kit()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -50,10 +80,24 @@ namespace MoonJet
 
                 _spriteBatch.Draw(_textureKit, _positionKit, Color.White);
             }
+            if (_chronoKit >= 10 || _chroneKitApp > 0)
+            {
+                _positionKit = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_KIT), 0);
+                _chroneKitApp += deltaTime;
+            }
+            if (_chronoKit >= 10)
+                _chronoKit = 0;
+
+            if (_chroneKitApp > 2)
+            {
+                _chroneKitApp = 0;
+                _positionKit = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_KIT), 0);
+            }
         }
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Draw(_textureKit, _positionKit, Color.White);
+            _spriteBatch.Draw(Perso, _positionKit, 0, _scale);
             base.Draw(gameTime);
         }
     }

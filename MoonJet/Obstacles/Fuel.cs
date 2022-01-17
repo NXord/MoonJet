@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
 
 namespace MoonJet
 {
@@ -10,6 +11,7 @@ namespace MoonJet
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
+        private AnimatedSprite _fuel;
         private Texture2D _textureFuel;
         private Vector2 _positionFuel;
         public const int LARGEUR_FUEL = 50;
@@ -18,9 +20,35 @@ namespace MoonJet
         private int _pasFuel;
         private float _chronoFuel;
         private float _chroneFuelApp;
+        private TypeAnimation _animation;
+        private Vector2 _scale;
         public Random r = new Random();
         private Game1 _game1;
 
+        public TypeAnimation Animation
+        {
+            get
+            {
+                return this._animation;
+            }
+
+            set
+            {
+                this._animation = value;
+            }
+        }
+        public AnimatedSprite Perso
+        {
+            get
+            {
+                return this._fuel;
+            }
+
+            set
+            {
+                this._fuel = value;
+            }
+        }
         public Fuel()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -46,7 +74,7 @@ namespace MoonJet
             _positionFuel.X -= _pasFuel * deltaTime;
             _rectangleFuel = new Rectangle((int)_positionFuel.Y, (int)_positionFuel.X, LARGEUR_FUEL, HAUTEUR_FUEL);
 
-            if (_rectangleFuel.Intersects(_ game1._rectanglePerso))
+            if (_rectangleFuel.Intersects(_game1._rectanglePerso))
             {
                 _positionFuel = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_FUEL), 0);
 
@@ -70,6 +98,7 @@ namespace MoonJet
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Draw(_textureFuel, _positionFuel, Color.White);
+            _spriteBatch.Draw(Perso, _positionFuel, 0, _scale);
             base.Draw(gameTime);
         }
     }

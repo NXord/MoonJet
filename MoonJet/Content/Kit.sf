@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "C:\\Users\\teal\\Pictures\\Saved Pictures\\New Piskel.png",
+    "regionWidth": 64,
+    "regionHeight": 64
+  },
+  "cycles": {
+    "animation1": {
+      "frames": [0],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

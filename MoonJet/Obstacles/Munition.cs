@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Sprites;
 
 namespace MoonJet
 {
@@ -17,8 +18,37 @@ namespace MoonJet
         private Rectangle _rectangleMun;
         private int _pasMun;
         public Random r = new Random();
+        private float _chronoMun;
+        private float _chroneMunApp;
+        private AnimatedSprite _mun;
+        private TypeAnimation _animation;
+        private Vector2 _scale;
         private Game1 _game1;
 
+        public TypeAnimation Animation
+        {
+            get
+            {
+                return this._animation;
+            }
+
+            set
+            {
+                this._animation = value;
+            }
+        }
+        public AnimatedSprite Perso
+        {
+            get
+            {
+                return this._mun;
+            }
+
+            set
+            {
+                this._mun = value;
+            }
+        }
         public Munition()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -50,10 +80,24 @@ namespace MoonJet
 
                 _spriteBatch.Draw(_textureMun, _positionMun, Color.White);
             }
+            if (_chronoMun >= 10 || _chroneMunApp > 0)
+            {
+                _positionMun = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_MUN), 0);
+                _chroneMunApp += deltaTime;
+            }
+            if (_chronoMun >= 10)
+                _chronoMun = 0;
+
+            if (_chroneMunApp > 2)
+            {
+                _chroneMunApp = 0;
+                _positionMun = new Vector2(r.Next(0, GraphicsDevice.Viewport.Width - LARGEUR_MUN), 0);
+            }
         }
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Draw(_textureMun, _positionMun, Color.White);
+            _spriteBatch.Draw(Perso, _positionMun, 0, _scale);
             base.Draw(gameTime);
         }
     }

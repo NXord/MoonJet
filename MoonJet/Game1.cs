@@ -7,10 +7,11 @@ using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using System;
+using System.Threading;
 
 namespace MoonJet
 {
-    public enum TypeAnimation {walk,decolage,vol,back,idle, explosion, meteorite };
+    public enum TypeAnimation {walk,decolage,vol,back,idle, explosion, meteorite,full,mid,low };
 
     public class Game1 : Game
     {
@@ -36,8 +37,7 @@ namespace MoonJet
         public const int TAILLE_PET = 40;
 
         private AnimatedSprite _meteorite;
-        private Texture2D _textureMeteorite;
-        private Vector2 _positionMeteorite;
+        private Vector2[] _positionMeteorite;
         public const int LARGEUR_METEORITE = 50;
         public const int HAUTEUR_METEORITE = 57;
         private Rectangle _rectangleMeteorite;
@@ -47,6 +47,23 @@ namespace MoonJet
 
         private Texture2D _fond;
         private Vector2 _positionFond;
+
+        public const int LARGEUR_coeur = 400;
+        public const int HAUTEUR_coeur = 475;
+
+        private Texture2D _textureCoeur;
+        private Vector2 _posCoeur;
+        public const int HAUTEUR_COEUR = 32;
+        private float _chronoCoeur;
+        private float _chronoCoeurApp;
+        public int posCoeurX;
+        public int posCoeurY;
+
+        private AnimatedSprite _life;
+        private Vector2 _poslife;
+        private TypeAnimation _animationLife;
+        private int _countLife;
+
 
 
         public TypeAnimation AnimationPerso
@@ -83,6 +100,18 @@ namespace MoonJet
             set
             {
                 this._animationMeteor = value;
+            }
+        }
+        public TypeAnimation AnimationLife
+        {
+            get
+            {
+                return this._animationLife;
+            }
+
+            set
+            {
+                this._animationLife = value;
             }
         }
 
@@ -122,6 +151,18 @@ namespace MoonJet
             set
             {
                 this._meteorite = value;
+            }
+        }
+        public AnimatedSprite Life
+        {
+            get
+            {
+                return this._life;
+            }
+
+            set
+            {
+                this._life = value;
             }
         }
 
@@ -179,8 +220,22 @@ namespace MoonJet
             _pasMeteorite = 100;
             _graphics.ApplyChanges();
 
-            _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
-            _rectangleMeteorite = new Rectangle((int)_positionMeteorite.X, (int)_positionMeteorite.Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
+            _positionMeteorite = new Vector2[10];
+
+            for (int i = 0; i < _positionMeteorite.Length; i++)
+            {
+                _positionMeteorite[i] = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
+                _rectangleMeteorite = new Rectangle((int)_positionMeteorite[i].X, (int)_positionMeteorite[i].Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
+
+            }
+
+            _posCoeur = new Vector2(-100,-100);
+            _chronoCoeur =0;
+            _chronoCoeurApp =0;
+
+            _poslife = new Vector2(27,7);
+
+            _countLife = 3;
 
             base.Initialize();
         }
@@ -192,12 +247,18 @@ namespace MoonJet
             SpriteSheet animationPerso = Content.Load<SpriteSheet>("Perso.sf", new JsonContentLoader());
             SpriteSheet animationPet = Content.Load<SpriteSheet>("Pet.sf", new JsonContentLoader());
             SpriteSheet animationMeteor = Content.Load<SpriteSheet>("Meteor.sf", new JsonContentLoader());
+            SpriteSheet animationLife = Content.Load<SpriteSheet>("life.sf", new JsonContentLoader());
 
             Perso = new AnimatedSprite(animationPerso);
             Pet = new AnimatedSprite(animationPet);
             Meteorite = new AnimatedSprite(animationMeteor);
+            Life = new AnimatedSprite(animationLife);
 
             _fond = Content.Load<Texture2D>("Fond");
+
+            _textureCoeur = Content.Load<Texture2D>("coeur");
+
+            Pet.SetFollowTarget(coeur, 0);
 
 
 
@@ -223,18 +284,18 @@ namespace MoonJet
                 _positionPerso.Y += fallSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Up))
+            if (keyboardState.IsKeyDown(Keys.Up) && _positionPerso.Y>=0)
             {
                 AnimationPerso = TypeAnimation.vol;
                 _positionPerso.Y = _positionPerso.Y - walkSpeed;
             }
             
-            if (keyboardState.IsKeyDown(Keys.Right))
+            if (keyboardState.IsKeyDown(Keys.Right) && _positionPerso.X<=GraphicsDevice.Viewport.Width)
             {
                 _positionPerso.X = _positionPerso.X + walkSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Left))
+            if (keyboardState.IsKeyDown(Keys.Left) && _positionPerso.X>=0)
             {
                 _positionPerso.X = _positionPerso.X - walkSpeed;
             }
@@ -243,27 +304,59 @@ namespace MoonJet
 
             AnimationMeteor = TypeAnimation.meteorite;
 
-            _positionMeteorite.X -= walkSpeed;
-            _rectangleMeteorite = new Rectangle((int)_positionMeteorite.X, (int)_positionMeteorite.Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
-
-            if (_positionMeteorite.X<0)
+            for (int i = 0; i < _positionMeteorite.Length; i++)
             {
-                _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
+                _positionMeteorite[i].X -= walkSpeed;
+                _rectangleMeteorite = new Rectangle((int)_positionMeteorite[i].X, (int)_positionMeteorite[i].Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
+                if (_positionMeteorite[i].X < 0)
+                {
+                    _positionMeteorite[i] = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
+
+                }
+                if (_rectangleMeteorite.Intersects(_rectanglePerso))
+                {
+                    AnimationMeteor = TypeAnimation.explosion;
+                    Meteorite.Play(AnimationMeteor.ToString());
+                    Meteorite.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+                    _positionMeteorite[i] = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
+                    _countLife--;
+                }
             }
-            if (_rectangleMeteorite.Intersects(_rectanglePerso))
+
+            if(_countLife == 3)
+                AnimationLife = TypeAnimation.full;
+            else if (_countLife == 2)
+                AnimationLife = TypeAnimation.mid;
+            else if (_countLife == 1)
+                AnimationLife = TypeAnimation.low;
+
+            _chronoCoeur += deltaTime;
+
+            if (_chronoCoeur >= 10 || _chronoCoeurApp > 0)
             {
-                _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
-                AnimationMeteor = TypeAnimation.explosion;
+                _posCoeur = new Vector2(posCoeurX, posCoeurY);
+                _chronoCoeurApp += deltaTime;
             }
+            if (_chronoCoeur >= 10)
+                _chronoCoeur = 0;
 
+            if (_chronoCoeurApp > 5)
+            {
+                _chronoCoeurApp = 0;
+                _posCoeur = new Vector2(-100, -100);
+                posCoeurX = r.Next(0, GraphicsDevice.Viewport.Width - HAUTEUR_COEUR);
+                posCoeurY = r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_COEUR);
+            }
 
             Perso.Play(AnimationPerso.ToString());
             Pet.Play(AnimationPet.ToString());
             Meteorite.Play(AnimationMeteor.ToString());
+            Life.Play(AnimationLife.ToString());
             Perso.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             Pet.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             Meteorite.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Life.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
 
             base.Update(gameTime);
@@ -278,9 +371,40 @@ namespace MoonJet
             SpriteBatch.Draw(_fond, _positionFond, Color.White);
             SpriteBatch.Draw(Perso, _positionPerso, 0, Scale);
             SpriteBatch.Draw(Pet, _positionPet);
-            SpriteBatch.Draw(Meteorite, _positionMeteorite);
+            foreach (Vector2 posMeteor in _positionMeteorite)
+            { _spriteBatch.Draw(Meteorite, posMeteor); }
+            SpriteBatch.Draw(Life, _poslife);
+            SpriteBatch.Draw(_textureCoeur, _posCoeur, Color.White);
             SpriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        protected void Follow()
+        {
+            if (FollowTarget == null)
+                return;
+
+            var distance = FollowTarget.Position - this.Position;
+            _rotation = (float)Math.Atan2(distance.Y, distance.X);
+
+            Direction = new Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
+
+            var currentDistance = Vector2.Distance(this.Position, FollowTarget.Position);
+            if (currentDistance > FollowDistance)
+            {
+                var t = MathHelper.Min((float)Math.Abs(currentDistance - FollowDistance), LinearVelocity);
+                var velocity = Direction * t;
+
+                Position += velocity;
+            }
+        }
+        public Sprite SetFollowTarget(Sprite followTarget, float followDistance)
+        {
+            FollowTarget = followTarget;
+
+            FollowDistance = followDistance;
+
+            return this;
         }
     }
 }

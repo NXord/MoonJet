@@ -1,0 +1,18 @@
+{
+  "textureAtlas": {
+    "texture": "life.png",
+    "regionWidth": 54,
+    "regionHeight": 14
+  },
+  "cycles": {
+    "full": {
+      "frames": [0]
+    },
+    "mid": {
+      "frames": [1]
+    },
+    "low": {
+      "frames": [2]
+    }
+  }
+}

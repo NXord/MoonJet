@@ -20,14 +20,15 @@ namespace MoonJet
         private TypeAnimation _animationPerso;
         private TypeAnimation _animationPet;
         private Vector2 _positionPerso;
-        public const int TAILLE_FENETRE= 800;
+        public const int HAUTEURFENTRE = 827;
+        public const int LARGEURFENTRE = 1168;
         private Vector2 _scale;
         private Vector2 _taillePerso;
         public const int HAUTEUR_PERSO = 27;
         public const int LARGEUR_PERSO = 15;
         public const int GROSSISEMENT = 4;
         public Rectangle _rectanglePerso;
-        public const int SOL = TAILLE_FENETRE - 100;
+        public static int sol;
 
         private AnimatedSprite _pet;
         private Vector2 _taillePet;
@@ -43,6 +44,9 @@ namespace MoonJet
         private TypeAnimation _animationMeteor;
         private int _pasMeteorite;
         public Random r = new Random();
+
+        private Texture2D _fond;
+        private Vector2 _positionFond;
 
 
         public TypeAnimation AnimationPerso
@@ -161,13 +165,13 @@ namespace MoonJet
         {
             // TODO: Add your initialization logic here
 
-            
-            _graphics.PreferredBackBufferWidth = TAILLE_FENETRE*2;
-            _graphics.PreferredBackBufferHeight = TAILLE_FENETRE;
+            _positionFond = new Vector2(0, 0);
+            _graphics.PreferredBackBufferWidth = LARGEURFENTRE;
+            _graphics.PreferredBackBufferHeight = HAUTEURFENTRE;
             _graphics.ApplyChanges();
             Scale = new Vector2(GROSSISEMENT,GROSSISEMENT);
             _taillePerso = new Vector2(LARGEUR_PERSO * Scale.X , HAUTEUR_PERSO * Scale.Y);
-            _positionPerso = new Vector2(_taillePerso.X-LARGEUR_PERSO, GraphicsDevice.Viewport.Height - _taillePerso.Y) ;
+            _positionPerso = new Vector2(_taillePerso.X-LARGEUR_PERSO, GraphicsDevice.Viewport.Height - _taillePerso.Y - 100) ;
             _rectanglePerso = new Rectangle((int)_positionPerso.X, (int)_positionPerso.Y, (int)_taillePerso.X, (int)_taillePerso.Y);
             _taillePet = new Vector2(TAILLE_PET * Scale.X, TAILLE_PET * Scale.Y);
             _positionPet = new Vector2(200, 200);
@@ -193,6 +197,10 @@ namespace MoonJet
             Pet = new AnimatedSprite(animationPet);
             Meteorite = new AnimatedSprite(animationMeteor);
 
+            _fond = Content.Load<Texture2D>("Fond");
+
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -210,7 +218,7 @@ namespace MoonJet
 
             Vector2 deplacement = new Vector2(0, 0);
 
-            if (_positionPerso.Y<SOL&&!(keyboardState.IsKeyDown(Keys.Up)))
+            if (_positionPerso.Y< GraphicsDevice.Viewport.Height- _taillePerso.Y && !(keyboardState.IsKeyDown(Keys.Up)))
             {
                 _positionPerso.Y += fallSpeed;
             }
@@ -267,6 +275,7 @@ namespace MoonJet
 
             // TODO: Add your drawing code here
             SpriteBatch.Begin();
+            SpriteBatch.Draw(_fond, _positionFond, Color.White);
             SpriteBatch.Draw(Perso, _positionPerso, 0, Scale);
             SpriteBatch.Draw(Pet, _positionPet);
             SpriteBatch.Draw(Meteorite, _positionMeteorite);

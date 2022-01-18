@@ -175,7 +175,7 @@ namespace MoonJet
             _pasMeteorite = 100;
             _graphics.ApplyChanges();
 
-            _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE), 0);
+            _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
             _rectangleMeteorite = new Rectangle((int)_positionMeteorite.X, (int)_positionMeteorite.Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
             base.Initialize();
@@ -230,21 +230,24 @@ namespace MoonJet
             {
                 _positionPerso.X = _positionPerso.X - walkSpeed;
             }
-
+            _rectanglePerso = new Rectangle((int)_positionPerso.X, (int)_positionPerso.Y, (int)_taillePerso.X, (int)_taillePerso.Y);
 
 
             AnimationMeteor = TypeAnimation.meteorite;
 
-            _positionMeteorite.X -= _pasMeteorite * deltaTime;
-            _rectangleMeteorite = new Rectangle((int)_positionMeteorite.Y, (int)_positionMeteorite.X, LARGEUR_METEORITE, HAUTEUR_METEORITE);
+            _positionMeteorite.X -= walkSpeed;
+            _rectangleMeteorite = new Rectangle((int)_positionMeteorite.X, (int)_positionMeteorite.Y, LARGEUR_METEORITE, HAUTEUR_METEORITE);
 
+            if (_positionMeteorite.X<0)
+            {
+                _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
+
+            }
             if (_rectangleMeteorite.Intersects(_rectanglePerso))
             {
-                _positionMeteorite = new Vector2(r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE), 0);
+                _positionMeteorite = new Vector2(GraphicsDevice.Viewport.Width, r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_METEORITE));
                 AnimationMeteor = TypeAnimation.explosion;
             }
-
-
 
 
             Perso.Play(AnimationPerso.ToString());

@@ -35,6 +35,7 @@ namespace MoonJet
         private Vector2 _taillePet;
         private Vector2 _positionPet;
         public const int TAILLE_PET = 40;
+        private Rectangle _rPet;
 
         private AnimatedSprite _meteorite;
         private Vector2[] _positionMeteorite;
@@ -58,6 +59,7 @@ namespace MoonJet
         private float _chronoCoeurApp;
         public int posCoeurX;
         public int posCoeurY;
+        private Rectangle _rCoeur;
 
         private AnimatedSprite _life;
         private Vector2 _poslife;
@@ -214,8 +216,10 @@ namespace MoonJet
             _taillePerso = new Vector2(LARGEUR_PERSO * Scale.X , HAUTEUR_PERSO * Scale.Y);
             _positionPerso = new Vector2(_taillePerso.X-LARGEUR_PERSO, GraphicsDevice.Viewport.Height - _taillePerso.Y - 100) ;
             _rectanglePerso = new Rectangle((int)_positionPerso.X, (int)_positionPerso.Y, (int)_taillePerso.X, (int)_taillePerso.Y);
+
             _taillePet = new Vector2(TAILLE_PET * Scale.X, TAILLE_PET * Scale.Y);
             _positionPet = new Vector2(200, 200);
+            _rPet = new Rectangle((int)_positionPet.X, (int)_positionPet.Y, TAILLE_PET, TAILLE_PET);
 
             _pasMeteorite = 100;
             _graphics.ApplyChanges();
@@ -232,6 +236,7 @@ namespace MoonJet
             _posCoeur = new Vector2(-100,-100);
             _chronoCoeur =0;
             _chronoCoeurApp =0;
+            _rCoeur = new Rectangle((int)_posCoeur.X, (int)_posCoeur.Y, HAUTEUR_COEUR, HAUTEUR_COEUR);
 
             _poslife = new Vector2(27,7);
 
@@ -258,11 +263,6 @@ namespace MoonJet
 
             _textureCoeur = Content.Load<Texture2D>("coeur");
 
-            Pet.SetFollowTarget(coeur, 0);
-
-
-
-
             // TODO: use this.Content to load your game content here
         }
 
@@ -279,23 +279,23 @@ namespace MoonJet
 
             Vector2 deplacement = new Vector2(0, 0);
 
-            if (_positionPerso.Y< GraphicsDevice.Viewport.Height- _taillePerso.Y && !(keyboardState.IsKeyDown(Keys.Up)))
+            if (_positionPerso.Y < GraphicsDevice.Viewport.Height - _taillePerso.Y && !(keyboardState.IsKeyDown(Keys.Up)))
             {
                 _positionPerso.Y += fallSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Up) && _positionPerso.Y>=0)
+            if (keyboardState.IsKeyDown(Keys.Up) && _positionPerso.Y >= 0)
             {
                 AnimationPerso = TypeAnimation.vol;
                 _positionPerso.Y = _positionPerso.Y - walkSpeed;
             }
-            
-            if (keyboardState.IsKeyDown(Keys.Right) && _positionPerso.X<=GraphicsDevice.Viewport.Width)
+
+            if (keyboardState.IsKeyDown(Keys.Right) && _positionPerso.X <= GraphicsDevice.Viewport.Width)
             {
                 _positionPerso.X = _positionPerso.X + walkSpeed;
             }
 
-            if (keyboardState.IsKeyDown(Keys.Left) && _positionPerso.X>=0)
+            if (keyboardState.IsKeyDown(Keys.Left) && _positionPerso.X >= 0)
             {
                 _positionPerso.X = _positionPerso.X - walkSpeed;
             }
@@ -324,18 +324,15 @@ namespace MoonJet
                 }
             }
 
-            if(_countLife == 3)
-                AnimationLife = TypeAnimation.full;
-            else if (_countLife == 2)
-                AnimationLife = TypeAnimation.mid;
-            else if (_countLife == 1)
-                AnimationLife = TypeAnimation.low;
+
 
             _chronoCoeur += deltaTime;
 
             if (_chronoCoeur >= 10 || _chronoCoeurApp > 0)
             {
                 _posCoeur = new Vector2(posCoeurX, posCoeurY);
+                Follow();
+                _rCoeur = new Rectangle((int)_posCoeur.X, (int)_posCoeur.Y, HAUTEUR_COEUR, HAUTEUR_COEUR);
                 _chronoCoeurApp += deltaTime;
             }
             if (_chronoCoeur >= 10)
@@ -347,7 +344,30 @@ namespace MoonJet
                 _posCoeur = new Vector2(-100, -100);
                 posCoeurX = r.Next(0, GraphicsDevice.Viewport.Width - HAUTEUR_COEUR);
                 posCoeurY = r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_COEUR);
+                _rCoeur = new Rectangle((int)_posCoeur.X, (int)_posCoeur.Y, HAUTEUR_COEUR, HAUTEUR_COEUR);
             }
+
+            _rPet = new Rectangle((int)_positionPet.X, (int)_positionPet.Y, TAILLE_PET, TAILLE_PET);
+
+            if (_rPet.Intersects(_rCoeur))
+            {
+                _chronoCoeurApp = 0;
+                _posCoeur = new Vector2(-100, -100);
+                posCoeurX = r.Next(0, GraphicsDevice.Viewport.Width - HAUTEUR_COEUR);
+                posCoeurY = r.Next(0, GraphicsDevice.Viewport.Height - HAUTEUR_COEUR);
+                _countLife += 1;
+            }
+
+
+            if (_countLife >= 3) {
+                _countLife = 3;
+                AnimationLife = TypeAnimation.full; }
+            else if (_countLife == 2)
+                AnimationLife = TypeAnimation.mid;
+            else if (_countLife == 1)
+                AnimationLife = TypeAnimation.low;
+
+
 
             Perso.Play(AnimationPerso.ToString());
             Pet.Play(AnimationPet.ToString());
@@ -381,30 +401,22 @@ namespace MoonJet
 
         protected void Follow()
         {
-            if (FollowTarget == null)
-                return;
+            float LinearVelocity = 4f;
+            var distanceX = _posCoeur.X - _positionPet.X;
+            var distanceY = _posCoeur.Y - _positionPet.Y;
+            
+            float _rotation = (float)Math.Atan2(distanceY, distanceX);
 
-            var distance = FollowTarget.Position - this.Position;
-            _rotation = (float)Math.Atan2(distance.Y, distance.X);
+            Vector2 Direction = new Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
 
-            Direction = new Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
-
-            var currentDistance = Vector2.Distance(this.Position, FollowTarget.Position);
-            if (currentDistance > FollowDistance)
+            var currentDistance = Vector2.Distance(_positionPet, _posCoeur);
+            if (currentDistance > 0)
             {
-                var t = MathHelper.Min((float)Math.Abs(currentDistance - FollowDistance), LinearVelocity);
+                var t = MathHelper.Min((float)Math.Abs(currentDistance), LinearVelocity);
                 var velocity = Direction * t;
 
-                Position += velocity;
+                _positionPet += velocity;
             }
-        }
-        public Sprite SetFollowTarget(Sprite followTarget, float followDistance)
-        {
-            FollowTarget = followTarget;
-
-            FollowDistance = followDistance;
-
-            return this;
         }
     }
 }

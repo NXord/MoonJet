@@ -44,7 +44,7 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<None Update="Content\life.sf">
+		<None Update="Content\Pet.sf">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

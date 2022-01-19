@@ -429,6 +429,8 @@ namespace MoonJet
         protected void Follow()
         {
             float LinearVelocity = 4f;
+
+            //Calcule de la distance entre le pet et le coeur.
             var distanceX = _posCoeur.X - _positionPet.X;
             var distanceY = _posCoeur.Y - _positionPet.Y;
 
@@ -436,6 +438,7 @@ namespace MoonJet
 
             Vector2 Direction = new Vector2((float)Math.Cos(_rotation), (float)Math.Sin(_rotation));
 
+            //Deplacement de notre Pet.
             var currentDistance = Vector2.Distance(_positionPet, _posCoeur);
             if (currentDistance > 0)
             {
